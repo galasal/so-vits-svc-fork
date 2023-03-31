@@ -659,6 +659,8 @@ def pre_sd(
     "-ho", "-hop", "--hop-seconds", type=float, default=0.3, help="hop seconds"
 )
 @click.option("-s", "--sr", type=int, default=44100, help="sample rate")
+@click.option("-min", "--min_length", type=int, default=0, help="minimum length for output audio segment (shorter segments will not be saved)")
+@click.option("-max", "--max_length", type=int, default=99999, help="maximum length for output audio segment (longer segments will not be saved)")
 def pre_split(
     input_dir: Path | str,
     output_dir: Path | str,
@@ -667,6 +669,8 @@ def pre_split(
     hop_seconds: float,
     n_jobs: int,
     sr: int,
+    min_length: int,
+    max_length: int
 ):
     """Split audio files into multiple files"""
     from .preprocess_split import preprocess_split
@@ -679,6 +683,8 @@ def pre_split(
         hop_seconds=hop_seconds,
         n_jobs=n_jobs,
         sr=sr,
+        min_length=min_length,
+        max_length=max_length
     )
 
 

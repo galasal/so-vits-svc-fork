@@ -20,6 +20,8 @@ def _process_one(
     top_db: int = 30,
     frame_seconds: float = 0.5,
     hop_seconds: float = 0.1,
+    min_length: int = 2,
+    max_length: int = 10
 ):
     try:
         audio, sr = librosa.load(input_path, sr=sr, mono=True)
@@ -35,11 +37,13 @@ def _process_one(
     output_dir.mkdir(parents=True, exist_ok=True)
     for start, end in tqdm(intervals, desc=f"Writing {input_path}"):
         audio_cut = audio[start:end]
-        sf.write(
-            (output_dir / f"{input_path.stem}_{start / sr:.3f}_{end / sr:.3f}.wav"),
-            audio_cut,
-            sr,
-        )
+        duration = len(audio_cut) / sr
+        if duration >= min_length and duration <= max_length:
+            sf.write(
+                (output_dir / f"{input_path.stem}_{start / sr:.3f}_{end / sr:.3f}.wav"),
+                audio_cut,
+                sr,
+            )
 
 
 def preprocess_split(
@@ -51,6 +55,8 @@ def preprocess_split(
     frame_seconds: float = 0.5,
     hop_seconds: float = 0.1,
     n_jobs: int = -1,
+    min_length: int = 2,
+    max_length: int = 10
 ):
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
@@ -65,6 +71,8 @@ def preprocess_split(
                 top_db=top_db,
                 frame_seconds=frame_seconds,
                 hop_seconds=hop_seconds,
+                min_length=min_length,
+                max_length=max_length
             )
             for input_path in input_paths
         )
