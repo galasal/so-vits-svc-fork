@@ -658,7 +658,6 @@ def pre_sd(
 @click.option(
     "-ho", "-hop", "--hop-seconds", type=float, default=0.3, help="hop seconds"
 )
-@click.option("-s", "--sr", type=int, default=44100, help="sample rate")
 def pre_split(
     input_dir: Path | str,
     output_dir: Path | str,
@@ -666,7 +665,6 @@ def pre_split(
     frame_seconds: float,
     hop_seconds: float,
     n_jobs: int,
-    sr: int,
 ):
     """Split audio files into multiple files"""
     from .preprocess_split import preprocess_split
@@ -678,7 +676,6 @@ def pre_split(
         frame_seconds=frame_seconds,
         hop_seconds=hop_seconds,
         n_jobs=n_jobs,
-        sr=sr,
     )
 
 
