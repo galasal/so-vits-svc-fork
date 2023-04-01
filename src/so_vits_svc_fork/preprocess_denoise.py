@@ -7,6 +7,7 @@ from tqdm_joblib import tqdm_joblib
 import os
 import soundfile as sf
 import shutil
+import importlib.util
 
 LOG = getLogger(__name__)
 
@@ -54,6 +55,11 @@ def preprocess_denoise(
         output_dir: Path | str,
         segment_seconds: int
 ):
+    spec = importlib.util.find_spec("demucs")
+    if spec is None:
+        print("demucs must be installed to use denoising")
+        exit()
+
     input_dir = Path(input_dir)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
