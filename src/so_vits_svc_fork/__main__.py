@@ -507,6 +507,41 @@ def pre_config(
         config_path=config_path,
     )
 
+@cli.command()
+@click.option(
+    "-i",
+    "--input-dir",
+    type=click.Path(exists=True),
+    default=Path("./dataset_raw_raw/"),
+    help="path to source dir",
+)
+@click.option(
+    "-o",
+    "--output-dir",
+    type=click.Path(),
+    default=Path("./dataset_denoised/"),
+    help="path to output dir",
+)
+@click.option(
+    "-s",
+    "--segment-seconds",
+    type=int,
+    default=900,
+    help="length of segments to process audio in (larger segments = faster processing, but more memory usage)"
+)
+def preprocess_denoise(
+    input_dir: Path | str,
+    output_dir: Path | str,
+    segment_seconds: int
+):
+    """Remove noise from files"""
+    from preprocess_denoise import preprocess_denoise
+
+    preprocess_denoise(
+        input_dir=input_dir,
+        output_dir=output_dir,
+        segment_seconds=segment_seconds
+    )
 
 @cli.command()
 @click.option(
